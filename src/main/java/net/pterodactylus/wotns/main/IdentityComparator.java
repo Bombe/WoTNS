@@ -37,7 +37,7 @@ public class IdentityComparator {
 		 */
 		@Override
 		public int compare(Identity leftIdentity, Identity rightIdentity) {
-			return leftIdentity.getNickname().compareTo(rightIdentity.getNickname());
+			return leftIdentity.getNickname().compareToIgnoreCase(rightIdentity.getNickname());
 		}
 
 	}
