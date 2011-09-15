@@ -1,0 +1,22 @@
+<h1>Manage “<%ownIdentity.nickname|html>”</h1>
+<%foreach ownIdentity.targets target>
+	<%first>
+		<h2>Existing Targets</h2>
+	<%/first>
+	<form action="editTarget.html" method="post">
+		<input type="hidden" name="formPassword" value="<%formPassword|html>"/>
+		<input type="hidden" name="name" value="<%target.key|html>"/>
+		<%target.key|html>:
+		<input type="text" name="target" value="<%target.value|html>"/>
+		<button type="submit" name="edit">Save</button>
+		<button type="submit" name="delete">Delete</button>
+	</form>
+<%/foreach>
+<h2>Add Target</h2>
+<form action="addTarget.html" method="post">
+	<input type="hidden" name="formPassword" value="<%formPassword|html>"/>
+	<input type="hidden" name="ownIdentity" value="<%ownIdentity.id|html>"/>
+	<input type="text" name="name" value=""/>
+	<input type="text" name="target" value=""/>
+	<button type="submit" name="add">Add</button>
+</form>

@@ -1,0 +1,12 @@
+<h1>WoTNS</h1>
+<p>Yay, Index!</p>
+<h1>Manage Names</h1>
+<form method="get" action="manage.html">
+	<select name="ownIdentity">
+		<option disabled="true">Choose identity…</option>
+		<%foreach ownIdentities ownIdentity>
+			<option value="<%ownIdentity.id|html>"><%ownIdentity.nickname|html></option>
+		<%/foreach>
+	</select>
+	<button type="submit" name="manage">Manage</button>
+</form>
