@@ -46,7 +46,7 @@ public class WoTNSPlugin implements FredPlugin, FredPluginL10n, FredPluginBaseL1
 		Logging.setupConsoleLogging();
 	}
 
-	private static final Version VERSION = new Version(0, 1);
+	private static final Version VERSION = new Version(0, 0, 1);
 
 	private PluginRespirator pluginRespirator;
 
