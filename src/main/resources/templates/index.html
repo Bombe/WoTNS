@@ -1,12 +1,26 @@
 <h1>WoTNS</h1>
 <p>Yay, Index!</p>
-<h1>Manage Names</h1>
-<form method="get" action="manage.html">
-	<select name="ownIdentity">
-		<option disabled="true">Choose identity…</option>
-		<%foreach ownIdentities ownIdentity>
-			<option value="<%ownIdentity.id|html>"><%ownIdentity.nickname|html></option>
-		<%/foreach>
-	</select>
-	<button type="submit" name="manage">Manage</button>
-</form>
+
+<%foreach enabledIdentities identity>
+	<%first>
+		<h1>Enabled Identities</h1>
+	<%/first>
+	<form action="enableIdentity.html" method="post">
+		<input type="hidden" name="formPassword" value="<%formPassword|html>"/>
+		<input type="hidden" name="ownIdentity" value="<%identity.id|html>"/>
+		<a href="manage.html?ownIdentity=<%identity.id|html>"><%identity.nickname|html></a>
+		<button type="submit" name="disable">Disable</button>
+	</form>
+<%/foreach>
+
+<%foreach disabledIdentities identity>
+	<%first>
+		<h1>Disabled Identities</h1>
+	<%/first>
+	<form action="enableIdentity.html" method="post">
+		<input type="hidden" name="formPassword" value="<%formPassword|html>"/>
+		<input type="hidden" name="ownIdentity" value="<%identity.id|html>"/>
+		<%identity.nickname|html>
+		<button type="submit" name="enable">Enable</button>
+	</form>
+<%/foreach>

@@ -17,8 +17,13 @@
 
 package net.pterodactylus.wotns.ui.web;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import net.pterodactylus.util.template.Template;
 import net.pterodactylus.util.template.TemplateContext;
+import net.pterodactylus.wotns.freenet.wot.OwnIdentity;
 import net.pterodactylus.wotns.web.FreenetRequest;
 
 /**
@@ -48,6 +53,20 @@ public class IndexPage extends BasicPage {
 	@Override
 	protected void processTemplate(FreenetRequest request, TemplateContext templateContext) throws RedirectException {
 		super.processTemplate(request, templateContext);
+
+		Set<OwnIdentity> ownIdentities = identityManager.getAllOwnIdentities();
+		List<OwnIdentity> enabledIdentities = new ArrayList<OwnIdentity>();
+		List<OwnIdentity> disabledIdentities = new ArrayList<OwnIdentity>();
+		for (OwnIdentity ownIdentity : ownIdentities) {
+			if (ownIdentity.hasContext("WoTNS")) {
+				enabledIdentities.add(ownIdentity);
+			} else {
+				disabledIdentities.add(ownIdentity);
+			}
+		}
+		templateContext.set("enabledIdentities", enabledIdentities);
+		templateContext.set("disabledIdentities", disabledIdentities);
+
 	}
 
 }
