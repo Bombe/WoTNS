@@ -35,11 +35,13 @@ import net.pterodactylus.util.web.StaticPage;
 import net.pterodactylus.wotns.freenet.wot.Identity;
 import net.pterodactylus.wotns.main.IdentityComparator;
 import net.pterodactylus.wotns.main.WoTNSPlugin;
+import net.pterodactylus.wotns.template.HttpRequestAccessor;
 import net.pterodactylus.wotns.template.IdentityAccessor;
 import net.pterodactylus.wotns.web.FreenetRequest;
 import net.pterodactylus.wotns.web.PageToadlet;
 import net.pterodactylus.wotns.web.PageToadletFactory;
 import freenet.clients.http.ToadletContainer;
+import freenet.support.api.HTTPRequest;
 
 /**
  * TODO
@@ -60,6 +62,7 @@ public class WebInterface {
 
 		templateContextFactory.addAccessor(Object.class, new ReflectionAccessor());
 		templateContextFactory.addAccessor(Identity.class, new IdentityAccessor());
+		templateContextFactory.addAccessor(HTTPRequest.class, new HttpRequestAccessor());
 		templateContextFactory.addFilter("html", new HtmlFilter());
 		CollectionSortFilter sortFilter = new CollectionSortFilter();
 		sortFilter.addComparator(Identity.class, IdentityComparator.NAME);
