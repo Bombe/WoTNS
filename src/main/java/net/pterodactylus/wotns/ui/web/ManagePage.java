@@ -36,7 +36,7 @@ public class ManagePage extends BasicPage {
 	 * @param template
 	 */
 	public ManagePage(Template template, WebInterface webInterface) {
-		super(webInterface, "manage.html", template);
+		super(webInterface, "manage.html", "Manage - Web of Trust Name Service", template);
 	}
 
 	/**

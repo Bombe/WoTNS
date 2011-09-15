@@ -35,7 +35,7 @@ public class ResolverPage extends BasicPage {
 	private final Resolver resolver;
 
 	public ResolverPage(Template unknownNameTemplate, WebInterface webInterface, Resolver resolver) {
-		super(webInterface, "", unknownNameTemplate);
+		super(webInterface, "", "Error - Web of Trust Name Service", unknownNameTemplate);
 		this.resolver = resolver;
 	}
 

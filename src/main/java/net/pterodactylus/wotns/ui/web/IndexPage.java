@@ -40,7 +40,7 @@ public class IndexPage extends BasicPage {
 	 * @param template
 	 */
 	public IndexPage(Template template, WebInterface webInterface) {
-		super(webInterface, "index.html", template);
+		super(webInterface, "index.html", "Web of Trust Name Service", template);
 	}
 
 	//

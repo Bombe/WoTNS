@@ -37,7 +37,7 @@ public class EnableIdentityPage extends BasicPage {
 	 * @param template
 	 */
 	public EnableIdentityPage(Template template, WebInterface webInterface) {
-		super(webInterface, "enableIdentity.html", template);
+		super(webInterface, "enableIdentity.html", null, template);
 	}
 
 	/**

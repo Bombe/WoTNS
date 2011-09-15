@@ -41,7 +41,7 @@ public class AddTargetPage extends BasicPage {
 	 * @param template
 	 */
 	public AddTargetPage(Template template, WebInterface webInterface) {
-		super(webInterface, "addTarget.html", template);
+		super(webInterface, "addTarget.html", null, template);
 	}
 
 	/**

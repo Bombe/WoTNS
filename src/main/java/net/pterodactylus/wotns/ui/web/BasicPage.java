@@ -39,10 +39,13 @@ public class BasicPage extends FreenetTemplatePage {
 
 	protected final IdentityManager identityManager;
 
-	public BasicPage(WebInterface webInterface, String path, Template template) {
+	private final String title;
+
+	public BasicPage(WebInterface webInterface, String path, String title, Template template) {
 		super(path, webInterface.getTemplateContextFactory(), template, "noPermission.html");
 		this.webInterface = webInterface;
 		this.identityManager = webInterface.getWoTNSPlugin().getIdentityManager();
+		this.title = title;
 	}
 
 	//
@@ -63,6 +66,14 @@ public class BasicPage extends FreenetTemplatePage {
 	//
 	// FREENETTEMPLATEPAGE METHODS
 	//
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected String getPageTitle(FreenetRequest request) {
+		return title;
+	}
 
 	/**
 	 * {@inheritDoc}

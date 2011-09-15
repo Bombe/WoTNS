@@ -40,7 +40,7 @@ public class EditTargetPage extends BasicPage {
 	 * @param template
 	 */
 	public EditTargetPage(Template template, WebInterface webInterface) {
-		super(webInterface, "editTarget.html", template);
+		super(webInterface, "editTarget.html", null, template);
 	}
 
 	/**
