@@ -24,7 +24,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-import net.pterodactylus.util.collection.Default;
+import net.pterodactylus.util.object.Default;
 import net.pterodactylus.wotns.freenet.wot.Identity;
 import net.pterodactylus.wotns.freenet.wot.IdentityManager;
 import net.pterodactylus.wotns.freenet.wot.OwnIdentity;
