@@ -47,7 +47,7 @@ public class EnableIdentityPage extends BasicPage {
 	protected void processTemplate(FreenetRequest request, TemplateContext templateContext) throws RedirectException {
 		super.processTemplate(request, templateContext);
 		if (request.getMethod() == Method.POST) {
-			OwnIdentity ownIdentity = getIdentity(request);
+			OwnIdentity ownIdentity = getOwnIdentity(request);
 			if (ownIdentity == null) {
 				/* TODO - show error. */
 				return;

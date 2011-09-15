@@ -46,7 +46,7 @@ public class BasicPage extends FreenetTemplatePage {
 	// PROTECTED METHODS
 	//
 
-	protected OwnIdentity getIdentity(FreenetRequest request) {
+	protected OwnIdentity getOwnIdentity(FreenetRequest request) {
 		if (request.getMethod() == Method.POST) {
 			String ownIdentityId = request.getHttpRequest().getPartAsStringFailsafe("ownIdentity", 43);
 			return identityManager.getOwnIdentity(ownIdentityId);
