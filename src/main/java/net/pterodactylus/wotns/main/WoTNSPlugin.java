@@ -94,7 +94,7 @@ public class WoTNSPlugin implements FredPlugin, FredPluginL10n, FredPluginBaseL1
 		PluginConnector pluginConnector = new PluginConnector(pluginRespirator);
 		webOfTrustConnector = new WebOfTrustConnector(pluginConnector);
 		identityManager = new IdentityManager(webOfTrustConnector);
-//		identityManager.setContext("WoTNS");
+		identityManager.setContext("WoTNS");
 		identityManager.start();
 
 		resolver = new Resolver(identityManager);
