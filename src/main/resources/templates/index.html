@@ -9,7 +9,7 @@ has to fulfill the Web of Trust’s requirement for a valid property name.</p>
 <p>To be able to add targets for one of your identities, you first have to create an identity using the <a href="/WebOfTrust/">Web of Trust</a>,
 and you have to enable the identity here.</p>
 
-<%foreach enabledIdentities identity>
+<%foreach enabledIdentities identity|sort>
 	<%first>
 		<h1>Enabled Identities</h1>
 	<%/first>
@@ -21,7 +21,7 @@ and you have to enable the identity here.</p>
 	</form>
 <%/foreach>
 
-<%foreach disabledIdentities identity>
+<%foreach disabledIdentities identity|sort>
 	<%first>
 		<h1>Disabled Identities</h1>
 	<%/first>
