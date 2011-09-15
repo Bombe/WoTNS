@@ -217,6 +217,17 @@ public class IdentityManager extends AbstractService {
 					for (Identity identity : trustedIdentities) {
 						identities.put(identity.getId(), identity);
 					}
+
+					/* add own identities, too, as long as the WoT doesn’t do that. */
+					for (OwnIdentity additionalOwnIdentity : ownIdentities) {
+						if (additionalOwnIdentity == ownIdentity) {
+							continue;
+						}
+						if ((context != null) && !additionalOwnIdentity.hasContext(context)) {
+							continue;
+						}
+						identities.put(additionalOwnIdentity.getId(), additionalOwnIdentity);
+					}
 				}
 				identitiesLoaded = true;
 			} catch (WebOfTrustException wote1) {
