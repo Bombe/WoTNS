@@ -19,6 +19,7 @@ package net.pterodactylus.wotns.ui.web;
 
 import net.pterodactylus.util.template.Template;
 import net.pterodactylus.util.template.TemplateContext;
+import net.pterodactylus.util.web.Method;
 import net.pterodactylus.wotns.freenet.wot.IdentityManager;
 import net.pterodactylus.wotns.freenet.wot.OwnIdentity;
 import net.pterodactylus.wotns.web.FreenetRequest;
@@ -32,6 +33,7 @@ import net.pterodactylus.wotns.web.FreenetTemplatePage;
 public class BasicPage extends FreenetTemplatePage {
 
 	protected final WebInterface webInterface;
+
 	protected final IdentityManager identityManager;
 
 	public BasicPage(WebInterface webInterface, String path, Template template) {
@@ -42,6 +44,21 @@ public class BasicPage extends FreenetTemplatePage {
 
 	//
 	// PROTECTED METHODS
+	//
+
+	protected OwnIdentity getIdentity(FreenetRequest request) {
+		if (request.getMethod() == Method.POST) {
+			String ownIdentityId = request.getHttpRequest().getPartAsStringFailsafe("ownIdentity", 43);
+			return identityManager.getOwnIdentity(ownIdentityId);
+		} else if (request.getMethod() == Method.GET) {
+			String ownIdentityId = request.getHttpRequest().getParam("ownIdentity");
+			return identityManager.getOwnIdentity(ownIdentityId);
+		}
+		return null;
+	}
+
+	//
+	// FREENETTEMPLATEPAGE METHODS
 	//
 
 	/**
