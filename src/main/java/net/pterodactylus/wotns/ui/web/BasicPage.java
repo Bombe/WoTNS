@@ -17,6 +17,9 @@
 
 package net.pterodactylus.wotns.ui.web;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import net.pterodactylus.util.template.Template;
 import net.pterodactylus.util.template.TemplateContext;
 import net.pterodactylus.util.web.Method;
@@ -65,9 +68,18 @@ public class BasicPage extends FreenetTemplatePage {
 	 * {@inheritDoc}
 	 */
 	@Override
+	protected Collection<String> getStyleSheets() {
+		return Arrays.asList("css/main.css");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	protected void processTemplate(FreenetRequest request, TemplateContext templateContext) throws RedirectException {
 		super.processTemplate(request, templateContext);
 		templateContext.set("ownIdentities", identityManager.getAllOwnIdentities());
 		templateContext.set("formPassword", webInterface.getWoTNSPlugin().getToadletContainer().getFormPassword());
 	}
+
 }

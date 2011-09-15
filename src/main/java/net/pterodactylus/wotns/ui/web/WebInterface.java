@@ -30,10 +30,12 @@ import net.pterodactylus.util.template.ReflectionAccessor;
 import net.pterodactylus.util.template.Template;
 import net.pterodactylus.util.template.TemplateContextFactory;
 import net.pterodactylus.util.template.TemplateParser;
+import net.pterodactylus.util.web.StaticPage;
 import net.pterodactylus.wotns.freenet.wot.Identity;
 import net.pterodactylus.wotns.main.IdentityComparator;
 import net.pterodactylus.wotns.main.WoTNSPlugin;
 import net.pterodactylus.wotns.template.IdentityAccessor;
+import net.pterodactylus.wotns.web.FreenetRequest;
 import net.pterodactylus.wotns.web.PageToadlet;
 import net.pterodactylus.wotns.web.PageToadletFactory;
 import freenet.clients.http.ToadletContainer;
@@ -104,6 +106,7 @@ public class WebInterface {
 		pageToadlets.add(pageToadletFactory.createPageToadlet(new EnableIdentityPage(new Template(), this)));
 		pageToadlets.add(pageToadletFactory.createPageToadlet(new AddTargetPage(addTargetTemplate, this)));
 		pageToadlets.add(pageToadletFactory.createPageToadlet(new EditTargetPage(new Template(), this)));
+		pageToadlets.add(pageToadletFactory.createPageToadlet(new StaticPage<FreenetRequest>("css/", "/static/css/", "text/css")));
 
 		ToadletContainer toadletContainer = wotNSPlugin.getToadletContainer();
 		toadletContainer.getPageMaker().addNavigationCategory("/tns/index.html", "Navigation.Menu.Name", "Navigation.Menu.Tooltip", wotNSPlugin);
