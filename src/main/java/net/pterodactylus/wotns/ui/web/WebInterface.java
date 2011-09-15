@@ -24,12 +24,14 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.pterodactylus.util.template.CollectionSortFilter;
 import net.pterodactylus.util.template.HtmlFilter;
 import net.pterodactylus.util.template.ReflectionAccessor;
 import net.pterodactylus.util.template.Template;
 import net.pterodactylus.util.template.TemplateContextFactory;
 import net.pterodactylus.util.template.TemplateParser;
 import net.pterodactylus.wotns.freenet.wot.Identity;
+import net.pterodactylus.wotns.main.IdentityComparator;
 import net.pterodactylus.wotns.main.WoTNSPlugin;
 import net.pterodactylus.wotns.template.IdentityAccessor;
 import net.pterodactylus.wotns.web.PageToadlet;
@@ -56,6 +58,9 @@ public class WebInterface {
 		templateContextFactory.addAccessor(Object.class, new ReflectionAccessor());
 		templateContextFactory.addAccessor(Identity.class, new IdentityAccessor());
 		templateContextFactory.addFilter("html", new HtmlFilter());
+		CollectionSortFilter sortFilter = new CollectionSortFilter();
+		sortFilter.addComparator(Identity.class, IdentityComparator.NAME);
+		templateContextFactory.addFilter("sort", sortFilter);
 	}
 
 	//

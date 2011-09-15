@@ -17,11 +17,6 @@
 
 package net.pterodactylus.wotns.ui.web;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import net.pterodactylus.util.template.Template;
 import net.pterodactylus.util.template.TemplateContext;
 import net.pterodactylus.wotns.freenet.wot.IdentityManager;
@@ -55,17 +50,7 @@ public class BasicPage extends FreenetTemplatePage {
 	@Override
 	protected void processTemplate(FreenetRequest request, TemplateContext templateContext) throws RedirectException {
 		super.processTemplate(request, templateContext);
-
-		List<OwnIdentity> ownIdentities = new ArrayList<OwnIdentity>(webInterface.getWoTNSPlugin().getIdentityManager().getAllOwnIdentities());
-		Collections.sort(ownIdentities, new Comparator<OwnIdentity>() {
-
-			@Override
-			public int compare(OwnIdentity leftOwnIdentity, OwnIdentity rightOwnIdentity) {
-				return leftOwnIdentity.getNickname().compareTo(rightOwnIdentity.getNickname());
-			}
-		});
-
-		templateContext.set("ownIdentities", ownIdentities);
+		templateContext.set("ownIdentities", identityManager.getAllOwnIdentities());
 		templateContext.set("formPassword", webInterface.getWoTNSPlugin().getToadletContainer().getFormPassword());
 	}
 }
