@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 
 import net.pterodactylus.util.collection.SetBuilder;
 import net.pterodactylus.util.logging.Logging;
+import net.pterodactylus.util.object.Default;
 import net.pterodactylus.util.service.AbstractService;
 import net.pterodactylus.wotns.freenet.plugin.PluginException;
 
@@ -177,7 +178,7 @@ public class IdentityManager extends AbstractService {
 			identities.add(ownIdentity);
 		}
 		synchronized (syncObject) {
-			identities.addAll(currentTrustedIdentities.get(ownIdentity));
+			identities.addAll(Default.forNull(currentTrustedIdentities.get(ownIdentity), Collections.<Identity> emptySet()));
 		}
 		return identities.get();
 	}
