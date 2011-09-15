@@ -5,11 +5,12 @@
 	<%/first>
 	<form action="editTarget.html" method="post">
 		<input type="hidden" name="formPassword" value="<%formPassword|html>"/>
+		<input type="hidden" name="ownIdentity" value="<%ownIdentity.id|html>"/>
 		<input type="hidden" name="name" value="<%target.key|html>"/>
 		<%target.key|html>:
 		<input type="text" name="target" value="<%target.value|html>"/>
-		<button type="submit" name="edit">Save</button>
-		<button type="submit" name="delete">Delete</button>
+		<button type="submit" name="edit" value="true">Save</button>
+		<button type="submit" name="delete" value="true">Delete</button>
 	</form>
 <%/foreach>
 <h2>Add Target</h2>

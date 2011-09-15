@@ -103,6 +103,7 @@ public class WebInterface {
 		pageToadlets.add(pageToadletFactory.createPageToadlet(new ManagePage(manageTemplate, this)));
 		pageToadlets.add(pageToadletFactory.createPageToadlet(new EnableIdentityPage(new Template(), this)));
 		pageToadlets.add(pageToadletFactory.createPageToadlet(new AddTargetPage(addTargetTemplate, this)));
+		pageToadlets.add(pageToadletFactory.createPageToadlet(new EditTargetPage(new Template(), this)));
 
 		ToadletContainer toadletContainer = wotNSPlugin.getToadletContainer();
 		toadletContainer.getPageMaker().addNavigationCategory("/tns/index.html", "Navigation.Menu.Name", "Navigation.Menu.Tooltip", wotNSPlugin);
