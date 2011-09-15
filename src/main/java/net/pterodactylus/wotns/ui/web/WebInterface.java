@@ -24,6 +24,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.pterodactylus.util.template.ClassPathTemplateProvider;
 import net.pterodactylus.util.template.CollectionSortFilter;
 import net.pterodactylus.util.template.HtmlFilter;
 import net.pterodactylus.util.template.ReflectionAccessor;
@@ -63,6 +64,7 @@ public class WebInterface {
 		CollectionSortFilter sortFilter = new CollectionSortFilter();
 		sortFilter.addComparator(Identity.class, IdentityComparator.NAME);
 		templateContextFactory.addFilter("sort", sortFilter);
+		templateContextFactory.addProvider(new ClassPathTemplateProvider(WebInterface.class));
 	}
 
 	//
