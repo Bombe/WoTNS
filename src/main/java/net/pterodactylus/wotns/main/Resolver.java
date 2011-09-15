@@ -97,7 +97,7 @@ public class Resolver {
 			return null;
 		}
 		System.out.println("using own identity " + ownIdentity + " to resolve " + shortName);
-		Set<Identity> trustedIdentities = Default.forNull(identityManager.getTrustedIdentities(ownIdentity), Collections.<Identity>emptySet());
+		Set<Identity> trustedIdentities = Default.forNull(identityManager.getTrustedIdentities(ownIdentity), Collections.<Identity> emptySet());
 		List<Identity> matchingIdentities = new ArrayList<Identity>();
 		System.out.println("checking " + trustedIdentities);
 		for (Identity identity : trustedIdentities) {
