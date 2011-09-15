@@ -21,7 +21,6 @@ import net.pterodactylus.util.logging.Logging;
 import net.pterodactylus.util.version.Version;
 import net.pterodactylus.wotns.freenet.plugin.PluginConnector;
 import net.pterodactylus.wotns.freenet.wot.IdentityManager;
-import net.pterodactylus.wotns.freenet.wot.OwnIdentity;
 import net.pterodactylus.wotns.freenet.wot.WebOfTrustConnector;
 import net.pterodactylus.wotns.ui.web.WebInterface;
 import freenet.client.HighLevelSimpleClient;
@@ -99,8 +98,7 @@ public class WoTNSPlugin implements FredPlugin, FredPluginL10n, FredPluginBaseL1
 		identityManager.start();
 
 		resolver = new Resolver(identityManager);
-		OwnIdentity bombeIdentity = identityManager.getOwnIdentity("e3myoFyp5avg6WYN16ImHri6J7Nj8980Fm~aQe4EX1U");
-		resolver.setOwnIdentity(bombeIdentity);
+		resolver.setOwnIdentityId("e3myoFyp5avg6WYN16ImHri6J7Nj8980Fm~aQe4EX1U");
 
 		webInterface = new WebInterface(this);
 

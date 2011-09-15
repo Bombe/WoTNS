@@ -40,14 +40,14 @@ public class Resolver {
 
 	private final IdentityManager identityManager;
 
-	private OwnIdentity ownIdentity;
+	private String ownIdentityId;
 
 	public Resolver(IdentityManager identityManager) {
 		this.identityManager = identityManager;
 	}
 
-	public void setOwnIdentity(OwnIdentity ownIdentity) {
-		this.ownIdentity = ownIdentity;
+	public void setOwnIdentityId(String ownIdentityId) {
+		this.ownIdentityId = ownIdentityId;
 	}
 
 	//
@@ -83,7 +83,7 @@ public class Resolver {
 		}
 		@SuppressWarnings("hiding")
 		final OwnIdentity ownIdentity;
-		if (this.ownIdentity == null) {
+		if (this.ownIdentityId == null) {
 			Set<OwnIdentity> ownIdentities = identityManager.getAllOwnIdentities();
 			if (!ownIdentities.isEmpty()) {
 				ownIdentity = ownIdentities.iterator().next();
@@ -91,7 +91,7 @@ public class Resolver {
 				ownIdentity = null;
 			}
 		} else {
-			ownIdentity = this.ownIdentity;
+			ownIdentity = identityManager.getOwnIdentity(ownIdentityId);
 		}
 		if (ownIdentity == null) {
 			return null;
