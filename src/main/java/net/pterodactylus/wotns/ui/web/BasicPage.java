@@ -89,6 +89,7 @@ public class BasicPage extends FreenetTemplatePage {
 	@Override
 	protected void processTemplate(FreenetRequest request, TemplateContext templateContext) throws RedirectException {
 		super.processTemplate(request, templateContext);
+		templateContext.set("request", request.getHttpRequest());
 		templateContext.set("ownIdentities", identityManager.getAllOwnIdentities());
 		templateContext.set("formPassword", webInterface.getWoTNSPlugin().getToadletContainer().getFormPassword());
 	}
