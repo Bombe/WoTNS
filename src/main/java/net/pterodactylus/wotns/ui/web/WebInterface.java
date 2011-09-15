@@ -101,6 +101,7 @@ public class WebInterface {
 		pageToadlets.add(pageToadletFactory.createPageToadlet(new ResolverPage(unknownTemplate, this, wotNSPlugin.getResolver())));
 		pageToadlets.add(pageToadletFactory.createPageToadlet(new IndexPage(indexTemplate, this), "Index"));
 		pageToadlets.add(pageToadletFactory.createPageToadlet(new ManagePage(manageTemplate, this)));
+		pageToadlets.add(pageToadletFactory.createPageToadlet(new EnableIdentityPage(new Template(), this)));
 		pageToadlets.add(pageToadletFactory.createPageToadlet(new AddTargetPage(addTargetTemplate, this)));
 
 		ToadletContainer toadletContainer = wotNSPlugin.getToadletContainer();
