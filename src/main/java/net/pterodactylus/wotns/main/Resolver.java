@@ -46,6 +46,10 @@ public class Resolver {
 		this.identityManager = identityManager;
 	}
 
+	public String getOwnIdentityId() {
+		return ownIdentityId;
+	}
+
 	public void setOwnIdentityId(String ownIdentityId) {
 		this.ownIdentityId = ownIdentityId;
 	}
