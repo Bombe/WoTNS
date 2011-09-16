@@ -133,4 +133,12 @@ public class Resolver {
 		return matchingIdentities.get(0);
 	}
 
+	private OwnIdentity getFirstOwnIdentity() {
+		Set<OwnIdentity> ownIdentities = identityManager.getAllOwnIdentities();
+		if (!ownIdentities.isEmpty()) {
+			return ownIdentities.iterator().next();
+		}
+		return null;
+	}
+
 }
