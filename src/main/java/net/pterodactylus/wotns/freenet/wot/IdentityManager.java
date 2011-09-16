@@ -182,8 +182,10 @@ public class IdentityManager extends AbstractService {
 	 */
 	public Set<Identity> getTrustedIdentities(OwnIdentity ownIdentity) {
 		Set<Identity> identities = new HashSet<Identity>();
-		if ((context == null) || ownIdentity.getContexts().contains(context)) {
-			identities.add(ownIdentity);
+		for (OwnIdentity additionalOwnIdentity : getAllOwnIdentities()) {
+			if ((context == null) || additionalOwnIdentity.getContexts().contains(context)) {
+				identities.add(additionalOwnIdentity);
+			}
 		}
 		try {
 			Set<Identity> trustedIdentities = webOfTrustConnector.loadTrustedIdentities(ownIdentity, context);
