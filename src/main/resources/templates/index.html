@@ -1,6 +1,6 @@
 <%include include/head.html>
 <h1>WoTNS</h1>
-<p>The Web of Trust Service uses properties of Web of Trust identities to implement a DNS-like scheme on top of Freenet.</p>
+<p>The Web of Trust Name Service uses properties of Web of Trust identities to implement a DNS-like scheme on top of Freenet.</p>
 <p>The general syntax is: <code>http://<%request.host>/tns/<i>identity</i>/<i>target</i></code>.</p>
 <p><i>identity</i> is the nickname of a Web of Trust identity, such as “WoTNS”. It is also possible to include the beginning of the identity’s
 key into <i>identity</i>, in the form of <i>nickname@start-of-key</i>, such as “WoTNS@DAx”.</p>
@@ -9,7 +9,7 @@ has to fulfill the Web of Trust’s requirement for a valid property name.</p>
 <p>To be able to add targets for one of your identities, you first have to create an identity using the <a href="/WebOfTrust/">Web of Trust</a>,
 and you have to enable the identity here.</p>
 
-<%foreach enabledIdentities identity>
+<%foreach enabledIdentities identity|sort>
 	<%first>
 		<h1>Enabled Identities</h1>
 	<%/first>
@@ -21,7 +21,7 @@ and you have to enable the identity here.</p>
 	</form>
 <%/foreach>
 
-<%foreach disabledIdentities identity>
+<%foreach disabledIdentities identity|sort>
 	<%first>
 		<h1>Disabled Identities</h1>
 	<%/first>

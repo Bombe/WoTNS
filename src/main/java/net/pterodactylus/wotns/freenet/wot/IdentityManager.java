@@ -17,6 +17,7 @@
 
 package net.pterodactylus.wotns.freenet.wot;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,9 +27,7 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.pterodactylus.util.collection.SetBuilder;
 import net.pterodactylus.util.logging.Logging;
-import net.pterodactylus.util.object.Default;
 import net.pterodactylus.util.service.AbstractService;
 import net.pterodactylus.wotns.freenet.plugin.PluginException;
 
@@ -67,7 +66,7 @@ public class IdentityManager extends AbstractService {
 	private Map<String, OwnIdentity> currentOwnIdentities = new HashMap<String, OwnIdentity>();
 
 	/** The currently trusted identities. */
-	private Map<OwnIdentity, Set<Identity>> currentTrustedIdentities = new HashMap<OwnIdentity, Set<Identity>>();
+	private Map<OwnIdentity, Collection<Identity>> currentTrustedIdentities = new HashMap<OwnIdentity, Collection<Identity>>();
 
 	/**
 	 * Creates a new identity manager.
@@ -172,15 +171,31 @@ public class IdentityManager extends AbstractService {
 		}
 	}
 
+	/**
+	 * Returns all identities that are trusted by the given own identity. In
+	 * addition to all non-own identities the given own identity is also
+	 * returned.
+	 *
+	 * @param ownIdentity
+	 *            The own identity to get the trusted identities for
+	 * @return The identities trusted by the given own identity
+	 */
 	public Set<Identity> getTrustedIdentities(OwnIdentity ownIdentity) {
-		SetBuilder<Identity> identities = new SetBuilder<Identity>();
+		Set<Identity> identities = new HashSet<Identity>();
 		if ((context == null) || ownIdentity.getContexts().contains(context)) {
 			identities.add(ownIdentity);
 		}
-		synchronized (syncObject) {
-			identities.addAll(Default.forNull(currentTrustedIdentities.get(ownIdentity), Collections.<Identity> emptySet()));
+		try {
+			Set<Identity> trustedIdentities = webOfTrustConnector.loadTrustedIdentities(ownIdentity, context);
+			Map<String, Identity> newTrustedIdentities = new HashMap<String, Identity>();
+			for (Identity trustedIdentity : trustedIdentities) {
+				newTrustedIdentities.put(trustedIdentity.getId(), trustedIdentity);
+			}
+			checkTrustedIdentities(ownIdentity, newTrustedIdentities);
+		} catch (WebOfTrustException wote1) {
+			logger.log(Level.WARNING, String.format("Could not load all trusted identities for %s.", ownIdentity), wote1);
 		}
-		return identities.get();
+		return identities;
 	}
 
 	//
@@ -192,7 +207,6 @@ public class IdentityManager extends AbstractService {
 	 */
 	@Override
 	protected void serviceRun() {
-		Map<OwnIdentity, Map<String, Identity>> oldIdentities = Collections.emptyMap();
 		while (!shouldStop()) {
 			Map<OwnIdentity, Map<String, Identity>> currentIdentities = new HashMap<OwnIdentity, Map<String, Identity>>();
 			@SuppressWarnings("hiding")
@@ -218,7 +232,10 @@ public class IdentityManager extends AbstractService {
 						identities.put(identity.getId(), identity);
 					}
 
-					/* add own identities, too, as long as the WoT doesn’t do that. */
+					/*
+					 * add own identities, too, as long as the WoT doesn’t do
+					 * that.
+					 */
 					for (OwnIdentity additionalOwnIdentity : ownIdentities) {
 						if (additionalOwnIdentity == ownIdentity) {
 							continue;
@@ -241,75 +258,7 @@ public class IdentityManager extends AbstractService {
 
 				/* now check for changes in remote identities. */
 				for (OwnIdentity ownIdentity : currentOwnIdentities.values()) {
-
-					/* find new identities. */
-					for (Identity currentIdentity : currentIdentities.get(ownIdentity).values()) {
-						if (!oldIdentities.containsKey(ownIdentity) || !oldIdentities.get(ownIdentity).containsKey(currentIdentity.getId())) {
-							identityListenerManager.fireIdentityAdded(ownIdentity, currentIdentity);
-						}
-					}
-
-					/* find removed identities. */
-					if (oldIdentities.containsKey(ownIdentity)) {
-						for (Identity oldIdentity : oldIdentities.get(ownIdentity).values()) {
-							if (!currentIdentities.get(ownIdentity).containsKey(oldIdentity.getId())) {
-								identityListenerManager.fireIdentityRemoved(ownIdentity, oldIdentity);
-							}
-						}
-
-						/* check for changes in the contexts. */
-						for (Identity oldIdentity : oldIdentities.get(ownIdentity).values()) {
-							if (!currentIdentities.get(ownIdentity).containsKey(oldIdentity.getId())) {
-								continue;
-							}
-							Identity newIdentity = currentIdentities.get(ownIdentity).get(oldIdentity.getId());
-							Set<String> oldContexts = oldIdentity.getContexts();
-							Set<String> newContexts = newIdentity.getContexts();
-							if (oldContexts.size() != newContexts.size()) {
-								identityListenerManager.fireIdentityUpdated(ownIdentity, newIdentity);
-								continue;
-							}
-							for (String oldContext : oldContexts) {
-								if (!newContexts.contains(oldContext)) {
-									identityListenerManager.fireIdentityUpdated(ownIdentity, newIdentity);
-									break;
-								}
-							}
-						}
-
-						/* check for changes in the properties. */
-						for (Identity oldIdentity : oldIdentities.get(ownIdentity).values()) {
-							if (!currentIdentities.get(ownIdentity).containsKey(oldIdentity.getId())) {
-								continue;
-							}
-							Identity newIdentity = currentIdentities.get(ownIdentity).get(oldIdentity.getId());
-							Map<String, String> oldProperties = oldIdentity.getProperties();
-							Map<String, String> newProperties = newIdentity.getProperties();
-							if (oldProperties.size() != newProperties.size()) {
-								identityListenerManager.fireIdentityUpdated(ownIdentity, newIdentity);
-								continue;
-							}
-							for (Entry<String, String> oldProperty : oldProperties.entrySet()) {
-								if (!newProperties.containsKey(oldProperty.getKey()) || !newProperties.get(oldProperty.getKey()).equals(oldProperty.getValue())) {
-									identityListenerManager.fireIdentityUpdated(ownIdentity, newIdentity);
-									break;
-								}
-							}
-						}
-					}
-				}
-
-				/* remember the current set of identities. */
-				oldIdentities = currentIdentities;
-				synchronized (syncObject) {
-					currentTrustedIdentities.clear();
-					for (Entry<OwnIdentity, Map<String, Identity>> entry : currentIdentities.entrySet()) {
-						Set<Identity> identities = new HashSet<Identity>();
-						currentTrustedIdentities.put(entry.getKey(), identities);
-						for (Identity identity : entry.getValue().values()) {
-							identities.add(identity);
-						}
-					}
+					checkTrustedIdentities(ownIdentity, currentIdentities.get(ownIdentity));
 				}
 			}
 
@@ -336,6 +285,7 @@ public class IdentityManager extends AbstractService {
 			for (OwnIdentity oldOwnIdentity : currentOwnIdentities.values()) {
 				if (!newOwnIdentities.containsKey(oldOwnIdentity.getId())) {
 					identityListenerManager.fireOwnIdentityRemoved(oldOwnIdentity);
+					currentTrustedIdentities.remove(oldOwnIdentity);
 				}
 			}
 
@@ -349,6 +299,83 @@ public class IdentityManager extends AbstractService {
 			currentOwnIdentities.clear();
 			currentOwnIdentities.putAll(newOwnIdentities);
 		}
+	}
+
+	/**
+	 * Checks the given identities for changes since the last check.
+	 *
+	 * @param ownIdentity
+	 *            The own identity trusting the given identities
+	 * @param trustedIdentities
+	 *            The trusted identities
+	 */
+	private void checkTrustedIdentities(OwnIdentity ownIdentity, Map<String, Identity> trustedIdentities) {
+
+		@SuppressWarnings("hiding")
+		Map<String, Identity> currentTrustedIdentities = new HashMap<String, Identity>();
+		synchronized (syncObject) {
+			if (this.currentTrustedIdentities.containsKey(ownIdentity)) {
+				for (Identity identity : this.currentTrustedIdentities.get(ownIdentity)) {
+					currentTrustedIdentities.put(identity.getId(), identity);
+				}
+			}
+		}
+
+		/* find new identities. */
+		for (Identity currentIdentity : trustedIdentities.values()) {
+			if (!currentTrustedIdentities.containsKey(currentIdentity.getId())) {
+				identityListenerManager.fireIdentityAdded(ownIdentity, currentIdentity);
+			}
+		}
+
+		/* find removed identities. */
+		for (Identity oldIdentity : currentTrustedIdentities.values()) {
+			if (!trustedIdentities.containsKey(oldIdentity.getId())) {
+				identityListenerManager.fireIdentityRemoved(ownIdentity, oldIdentity);
+			}
+		}
+
+		/* check for changes in the contexts. */
+		for (Identity oldIdentity : currentTrustedIdentities.values()) {
+			if (!trustedIdentities.containsKey(oldIdentity.getId())) {
+				continue;
+			}
+			Identity newIdentity = trustedIdentities.get(oldIdentity.getId());
+			Set<String> oldContexts = oldIdentity.getContexts();
+			Set<String> newContexts = newIdentity.getContexts();
+			if (oldContexts.size() != newContexts.size()) {
+				identityListenerManager.fireIdentityUpdated(ownIdentity, newIdentity);
+				continue;
+			}
+			boolean changed = false;
+			for (String oldContext : oldContexts) {
+				if (!newContexts.contains(oldContext)) {
+					identityListenerManager.fireIdentityUpdated(ownIdentity, newIdentity);
+					changed = true;
+					break;
+				}
+			}
+			if (changed) {
+				continue;
+			}
+			Map<String, String> oldProperties = oldIdentity.getProperties();
+			Map<String, String> newProperties = newIdentity.getProperties();
+			if (oldProperties.size() != newProperties.size()) {
+				identityListenerManager.fireIdentityUpdated(ownIdentity, newIdentity);
+				continue;
+			}
+			for (Entry<String, String> oldProperty : oldProperties.entrySet()) {
+				if (!newProperties.containsKey(oldProperty.getKey()) || !newProperties.get(oldProperty.getKey()).equals(oldProperty.getValue())) {
+					identityListenerManager.fireIdentityUpdated(ownIdentity, newIdentity);
+					break;
+				}
+			}
+		}
+
+		synchronized (syncObject) {
+			this.currentTrustedIdentities.put(ownIdentity, trustedIdentities.values());
+		}
+
 	}
 
 }

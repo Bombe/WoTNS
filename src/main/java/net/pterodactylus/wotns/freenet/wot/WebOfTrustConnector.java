@@ -70,6 +70,10 @@ public class WebOfTrustConnector implements ConnectorListener {
 	// ACTIONS
 	//
 
+	/**
+	 * Stops the web of trust connector and disconnects from the plugin
+	 * connector.
+	 */
 	public void stop() {
 		pluginConnector.removeConnectorListener(WOT_PLUGIN_NAME, PLUGIN_CONNECTION_IDENTIFIER, this);
 	}
@@ -110,10 +114,10 @@ public class WebOfTrustConnector implements ConnectorListener {
 	 * @param ownIdentity
 	 *            The own identity
 	 * @return All trusted identities
-	 * @throws PluginException
+	 * @throws WebOfTrustException
 	 *             if an error occured talking to the Web of Trust plugin
 	 */
-	public Set<Identity> loadTrustedIdentities(OwnIdentity ownIdentity) throws PluginException {
+	public Set<Identity> loadTrustedIdentities(OwnIdentity ownIdentity) throws WebOfTrustException {
 		return loadTrustedIdentities(ownIdentity, null);
 	}
 
@@ -126,10 +130,10 @@ public class WebOfTrustConnector implements ConnectorListener {
 	 * @param context
 	 *            The context to filter, or {@code null}
 	 * @return All trusted identities
-	 * @throws PluginException
+	 * @throws WebOfTrustException
 	 *             if an error occured talking to the Web of Trust plugin
 	 */
-	public Set<Identity> loadTrustedIdentities(OwnIdentity ownIdentity, String context) throws PluginException {
+	public Set<Identity> loadTrustedIdentities(OwnIdentity ownIdentity, String context) throws WebOfTrustException {
 		@SuppressWarnings("hiding")
 		Reply reply = performRequest(SimpleFieldSetConstructor.create().put("Message", "GetIdentitiesByScore").put("TreeOwner", ownIdentity.getId()).put("Selection", "+").put("Context", (context == null) ? "" : context).get());
 		SimpleFieldSet fields = reply.getFields();
