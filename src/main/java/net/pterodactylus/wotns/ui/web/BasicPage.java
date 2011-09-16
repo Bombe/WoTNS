@@ -53,11 +53,15 @@ public class BasicPage extends FreenetTemplatePage {
 	//
 
 	protected OwnIdentity getOwnIdentity(FreenetRequest request) {
+		return getOwnIdentity(request, "ownIdentity");
+	}
+
+	protected OwnIdentity getOwnIdentity(FreenetRequest request, String parameterName) {
 		if (request.getMethod() == Method.POST) {
-			String ownIdentityId = request.getHttpRequest().getPartAsStringFailsafe("ownIdentity", 43);
+			String ownIdentityId = request.getHttpRequest().getPartAsStringFailsafe(parameterName, 43);
 			return identityManager.getOwnIdentity(ownIdentityId);
 		} else if (request.getMethod() == Method.GET) {
-			String ownIdentityId = request.getHttpRequest().getParam("ownIdentity");
+			String ownIdentityId = request.getHttpRequest().getParam(parameterName);
 			return identityManager.getOwnIdentity(ownIdentityId);
 		}
 		return null;
