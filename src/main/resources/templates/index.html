@@ -1,11 +1,13 @@
 <%include include/head.html>
 <h1>WoTNS</h1>
 <p>The Web of Trust Name Service uses properties of Web of Trust identities to implement a DNS-like scheme on top of Freenet.</p>
-<p>The general syntax is: <code>http://<%request.host>/tns/<i>identity[@start-of-key]</i>/<i>target</i></code>.</p>
+<p>The general syntax is: <code>http://<%request.host>/tns/<i>identity[@start-of-key]</i>/<i>target</i>[/<i>path</i>]</code>.</p>
 <p><i>identity</i> is the nickname of a Web of Trust identity, such as “WoTNS”. It is also possible to include the beginning of the identity’s
 key into <i>identity</i>, in the form of <i>nickname@start-of-key</i>, such as “WoTNS@DAx”.</p>
 <p>The <i>target</i> consists of a name chosen by the remote identity. It can consist of latin latters, digits, and periods (and the final name
 has to fulfill the Web of Trust’s requirement for a valid property name.</p>
+<p>The <i>target</i> can be followed by a path, such as “more_content.html”, that will be appended to whatever the target is set to,
+including the slash between <i>target</i> and <i>path</i>.</p>
 <p>To be able to add targets for one of your identities, you first have to create an identity using the <a href="/WebOfTrust/">Web of Trust</a>,
 and you have to enable the identity here.</p>
 

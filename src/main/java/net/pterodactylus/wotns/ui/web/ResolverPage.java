@@ -62,11 +62,19 @@ public class ResolverPage extends BasicPage {
 	protected void processTemplate(FreenetRequest request, TemplateContext templateContext) throws RedirectException {
 		String uri = request.getUri().getPath();
 		String path = uri.substring(uri.indexOf('/', 1) + 1);
-		FreenetURI targetUri;
+
+		/* look for path after target. */
+		int firstSlash = path.indexOf('/');
+		int secondSlash = path.indexOf('/', firstSlash + 1);
+		String filePath = "";
+		if (secondSlash != -1) {
+			filePath = path.substring(secondSlash);
+			path = path.substring(0, secondSlash);
+		}
 		try {
-			targetUri = resolver.resolveURI(path);
+			FreenetURI targetUri = resolver.resolveURI(path);
 			if (targetUri != null) {
-				throw new RedirectException("/" + targetUri.toString());
+				throw new RedirectException("/" + targetUri.toString() + filePath);
 			}
 		} catch (MalformedURLException mue1) {
 			/* TODO - do something. */
