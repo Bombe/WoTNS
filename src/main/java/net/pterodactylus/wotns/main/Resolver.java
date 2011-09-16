@@ -90,7 +90,6 @@ public class Resolver {
 			identityName = shortName.substring(0, atSign);
 			keyStart = shortName.substring(atSign + 1);
 		}
-		@SuppressWarnings("hiding")
 		final OwnIdentity ownIdentity;
 		if ((this.ownIdentityId != null) && (identityManager.getOwnIdentity(this.ownIdentityId) != null)) {
 			ownIdentity = identityManager.getOwnIdentity(this.ownIdentityId);
