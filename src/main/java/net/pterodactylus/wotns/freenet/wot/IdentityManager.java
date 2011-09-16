@@ -285,6 +285,7 @@ public class IdentityManager extends AbstractService {
 			for (OwnIdentity oldOwnIdentity : currentOwnIdentities.values()) {
 				if (!newOwnIdentities.containsKey(oldOwnIdentity.getId())) {
 					identityListenerManager.fireOwnIdentityRemoved(oldOwnIdentity);
+					currentTrustedIdentities.remove(oldOwnIdentity);
 				}
 			}
 
