@@ -23,7 +23,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import net.pterodactylus.util.logging.Logging;
 import net.pterodactylus.util.object.Default;
 import net.pterodactylus.wotns.freenet.wot.Identity;
 import net.pterodactylus.wotns.freenet.wot.IdentityManager;
@@ -37,6 +40,8 @@ import freenet.keys.FreenetURI;
  * @author <a href="mailto:bombe@pterodactylus.net">David ‘Bombe’ Roden</a>
  */
 public class Resolver {
+
+	private static final Logger logger = Logging.getLogger(Resolver.class);
 
 	private final IdentityManager identityManager;
 
@@ -85,19 +90,18 @@ public class Resolver {
 			identityName = shortName.substring(0, atSign);
 			keyStart = shortName.substring(atSign + 1);
 		}
-		@SuppressWarnings("hiding")
 		final OwnIdentity ownIdentity;
-		if (this.ownIdentityId == null) {
-			Set<OwnIdentity> ownIdentities = identityManager.getAllOwnIdentities();
-			if (!ownIdentities.isEmpty()) {
-				ownIdentity = ownIdentities.iterator().next();
+		if (this.ownIdentityId != null) {
+			if (identityManager.getOwnIdentity(this.ownIdentityId) != null) {
+				ownIdentity = identityManager.getOwnIdentity(this.ownIdentityId);
 			} else {
-				ownIdentity = null;
+				ownIdentity = getFirstOwnIdentity();
 			}
 		} else {
-			ownIdentity = identityManager.getOwnIdentity(ownIdentityId);
+			ownIdentity = getFirstOwnIdentity();
 		}
 		if (ownIdentity == null) {
+			logger.log(Level.SEVERE, "Can not resolve “" + shortName + "” without a Web of Trust Identity!");
 			return null;
 		}
 		System.out.println("using own identity " + ownIdentity + " to resolve " + shortName);
@@ -124,6 +128,14 @@ public class Resolver {
 			}
 		});
 		return matchingIdentities.get(0);
+	}
+
+	private OwnIdentity getFirstOwnIdentity() {
+		Set<OwnIdentity> ownIdentities = identityManager.getAllOwnIdentities();
+		if (!ownIdentities.isEmpty()) {
+			return ownIdentities.iterator().next();
+		}
+		return null;
 	}
 
 }

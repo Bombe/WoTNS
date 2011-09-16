@@ -46,7 +46,7 @@ public class WoTNSPlugin implements FredPlugin, FredPluginL10n, FredPluginBaseL1
 		Logging.setupConsoleLogging();
 	}
 
-	private static final Version VERSION = new Version(0, 0, 5);
+	private static final Version VERSION = new Version(0, 0, 6);
 
 	private PluginRespirator pluginRespirator;
 
@@ -98,7 +98,6 @@ public class WoTNSPlugin implements FredPlugin, FredPluginL10n, FredPluginBaseL1
 		identityManager.start();
 
 		resolver = new Resolver(identityManager);
-		resolver.setOwnIdentityId("e3myoFyp5avg6WYN16ImHri6J7Nj8980Fm~aQe4EX1U");
 
 		webInterface = new WebInterface(this);
 
