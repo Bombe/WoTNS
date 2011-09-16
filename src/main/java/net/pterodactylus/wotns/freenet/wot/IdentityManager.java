@@ -232,7 +232,10 @@ public class IdentityManager extends AbstractService {
 						identities.put(identity.getId(), identity);
 					}
 
-					/* add own identities, too, as long as the WoT doesn’t do that. */
+					/*
+					 * add own identities, too, as long as the WoT doesn’t do
+					 * that.
+					 */
 					for (OwnIdentity additionalOwnIdentity : ownIdentities) {
 						if (additionalOwnIdentity == ownIdentity) {
 							continue;
