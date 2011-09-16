@@ -87,7 +87,9 @@ public class Resolver {
 		}
 		@SuppressWarnings("hiding")
 		final OwnIdentity ownIdentity;
-		if (this.ownIdentityId == null) {
+		if ((this.ownIdentityId != null) && (identityManager.getOwnIdentity(this.ownIdentityId) != null)) {
+			ownIdentity = identityManager.getOwnIdentity(this.ownIdentityId);
+		} else if (this.ownIdentityId == null) {
 			Set<OwnIdentity> ownIdentities = identityManager.getAllOwnIdentities();
 			if (!ownIdentities.isEmpty()) {
 				ownIdentity = ownIdentities.iterator().next();
@@ -95,7 +97,7 @@ public class Resolver {
 				ownIdentity = null;
 			}
 		} else {
-			ownIdentity = identityManager.getOwnIdentity(ownIdentityId);
+			ownIdentity = null;
 		}
 		if (ownIdentity == null) {
 			return null;
