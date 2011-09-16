@@ -91,20 +91,17 @@ public class Resolver {
 			keyStart = shortName.substring(atSign + 1);
 		}
 		final OwnIdentity ownIdentity;
-		if ((this.ownIdentityId != null) && (identityManager.getOwnIdentity(this.ownIdentityId) != null)) {
-			ownIdentity = identityManager.getOwnIdentity(this.ownIdentityId);
-		} else if (this.ownIdentityId == null) {
-			Set<OwnIdentity> ownIdentities = identityManager.getAllOwnIdentities();
-			if (!ownIdentities.isEmpty()) {
-				ownIdentity = ownIdentities.iterator().next();
+		if (this.ownIdentityId != null) {
+			if (identityManager.getOwnIdentity(this.ownIdentityId) != null) {
+				ownIdentity = identityManager.getOwnIdentity(this.ownIdentityId);
 			} else {
-				ownIdentity = null;
+				ownIdentity = getFirstOwnIdentity();
 			}
 		} else {
-			logger.log(Level.SEVERE, "Can not resolve “" + shortName + "” without a Web of Trust Identity!");
-			ownIdentity = null;
+			ownIdentity = getFirstOwnIdentity();
 		}
 		if (ownIdentity == null) {
+			logger.log(Level.SEVERE, "Can not resolve “" + shortName + "” without a Web of Trust Identity!");
 			return null;
 		}
 		System.out.println("using own identity " + ownIdentity + " to resolve " + shortName);
