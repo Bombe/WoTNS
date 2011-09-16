@@ -27,9 +27,7 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.pterodactylus.util.collection.SetBuilder;
 import net.pterodactylus.util.logging.Logging;
-import net.pterodactylus.util.object.Default;
 import net.pterodactylus.util.service.AbstractService;
 import net.pterodactylus.wotns.freenet.plugin.PluginException;
 
@@ -173,15 +171,31 @@ public class IdentityManager extends AbstractService {
 		}
 	}
 
+	/**
+	 * Returns all identities that are trusted by the given own identity. In
+	 * addition to all non-own identities the given own identity is also
+	 * returned.
+	 *
+	 * @param ownIdentity
+	 *            The own identity to get the trusted identities for
+	 * @return The identities trusted by the given own identity
+	 */
 	public Set<Identity> getTrustedIdentities(OwnIdentity ownIdentity) {
-		SetBuilder<Identity> identities = new SetBuilder<Identity>();
+		Set<Identity> identities = new HashSet<Identity>();
 		if ((context == null) || ownIdentity.getContexts().contains(context)) {
 			identities.add(ownIdentity);
 		}
-		synchronized (syncObject) {
-			identities.addAll(Default.forNull(currentTrustedIdentities.get(ownIdentity), Collections.<Identity> emptySet()));
+		try {
+			Set<Identity> trustedIdentities = webOfTrustConnector.loadTrustedIdentities(ownIdentity, context);
+			Map<String, Identity> newTrustedIdentities = new HashMap<String, Identity>();
+			for (Identity trustedIdentity : trustedIdentities) {
+				newTrustedIdentities.put(trustedIdentity.getId(), trustedIdentity);
+			}
+			checkTrustedIdentities(ownIdentity, newTrustedIdentities);
+		} catch (WebOfTrustException wote1) {
+			logger.log(Level.WARNING, String.format("Could not load all trusted identities for %s.", ownIdentity), wote1);
 		}
-		return identities.get();
+		return identities;
 	}
 
 	//
