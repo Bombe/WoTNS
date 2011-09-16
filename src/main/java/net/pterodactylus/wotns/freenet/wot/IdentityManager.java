@@ -192,6 +192,7 @@ public class IdentityManager extends AbstractService {
 				newTrustedIdentities.put(trustedIdentity.getId(), trustedIdentity);
 			}
 			checkTrustedIdentities(ownIdentity, newTrustedIdentities);
+			identities.addAll(trustedIdentities);
 		} catch (WebOfTrustException wote1) {
 			logger.log(Level.WARNING, String.format("Could not load all trusted identities for %s.", ownIdentity), wote1);
 		}
