@@ -70,6 +70,10 @@ public class WebOfTrustConnector implements ConnectorListener {
 	// ACTIONS
 	//
 
+	/**
+	 * Stops the web of trust connector and disconnects from the plugin
+	 * connector.
+	 */
 	public void stop() {
 		pluginConnector.removeConnectorListener(WOT_PLUGIN_NAME, PLUGIN_CONNECTION_IDENTIFIER, this);
 	}
