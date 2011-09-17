@@ -1,0 +1,54 @@
+= Introduction =
+
+''WoTNS'' is short for ''Web of Trust Name Service.'' It aims at building a DNS-like service on top of Freenet. It allows short links that look like <tt>http://localhost:8888/tns/WoTNS/LatestPlugin</tt> which will redirect you to a full, more than 100 characters long USK.
+
+== The Problem ==
+
+Pages in Freenet are referred to by their keys. While keys are unique and perfectly fit for identifying pages they are also more than 100 characters long and thus are completely intypeable. This makes it impossible to spread Freenet keys via offline media such as e.g. business cards, or a URL in a video.
+
+In addition to ''USK''s, ''SSK''s, and ''CHK''s Freenet also offers ''KSK''s which might be used to alleviate that problem. Unfortunately, KSKs are not ''secure:'' there is no way for you to make sure that a key you inserted under a specific KSK will not changed by somebody else.
+
+== The Solution ==
+
+The Web of Trust plugin offers a solution: each identity is allowed to have properties. By storing short names and long keys in the properties it is possible to have a web-of-trust-based name service in which you can control what your short names point to, and as long as you are deemed trustworthy by the community at large, the target of your short names will never change.
+
+Short names currently have the form &ldquo;''identity'' [ &lsquo;@&rsquo; ''start-of-key'' ] &lsquo;/&rsquo; ''target'' [ &lsquo;/&rsquo; ''file-path'' ]&rdquo;.
+
+''identity'': The identity is the name of the Web of Trust identity, such as &ldquo;WoTNS&rdquo; or &ldquo;Bombe.&rdquo; This name is case-sensitive, so &ldquo;wotns&rdquo; is ''not'' the same as &ldquo;WoTNS!&rdquo;
+
+''start-of-key'': Sometimes the name of an identity is not enough to distinguish two identities from one another. In this case it is possible to specify the beginning of the identity&rsquo;s ID to make it possible to pick the correct identity. If two (or more) identities match a given name and no key is specified the one with the highest trust value is chosen!
+
+''target'': The target specifies the name of the target you want to access. It is chosen by the identity and can be a descriptive name such as &ldquo;homepage&rdquo; or &ldquo;flog.&rdquo;
+
+''file-path'': If you want to link to a specific file within a defined short name, just enter its path after the target. It will then be appended to the defined target.
+
+== Examples ==
+
+Syntactically valid short names include:
+
+* <tt>WoTNS/LatestVersion</tt>
+* <tt>WoTNS/Homepage/activelink.png</tt>
+* <tt>WoTNS@DAx/Homepage</tt>
+
+= Usage =
+
+== Installation ==
+
+Installing ''WoTNS'' is as easy as entering the plugin&rsquo;s key into the textbox in the section &ldquo;Add an Unofficial Plugin&rdquo; on your Freenet node&rsquo;s plugin manager page (find it in the &ldquo;Configuration&rdquo; menu). Untick the checkbox named &ldquo;local file only&rdquo; and press the &ldquo;Load&rdquo; button.
+
+Freenet will then download the plugin and start it. As soon as the plugin has been loaded, a new menu entry named &ldquo;WoTNS&rdquo; will appear.
+
+== Managing Your Short Names ==
+
+By clicking the &ldquo;WoTNS&rdquo; menu entry you can manage the short names of your identities and which identities are enable for short names at all. If you don’t see any identities listed on this page you have to create one (or more) identities using the &ldquo;Community&rdquo; menu, after loading the &ldquo;Web of Trust&rdquo; plugin.
+
+An identity must be explicitely enabled to be able to expose short names. Use the &ldquo;Enable&rdquo; and &ldquo;Disable&rdquo; buttons to switch identities between their enabled and disabled states.
+
+By clicking an enabled identity&rsquo;s name you can manage the short names for that identity. You can edit and delete existing short names, and you can add new short names.
+
+Note: if you add a new target with the name of an existing target, the existing target will be overwritten.
+
+== Using a Short Name ==
+
+At the moment using short names is a little bit cumbersome because Freenet itself does not yet have any built-in support for them. So if somebody gives you a short name (e.g. &ldquo;CoolGuy/Homepage&rdquo;) all you have to do is to enter the following URL in your browser: <tt>http://localhost:8888/tns/CoolGuy/Homepage</tt>. This example assumes that your node is running on <tt>localhost</tt>, and that CoolGuy&rsquo;s web of trust identity has already been found by your web of trust plugin.
+
