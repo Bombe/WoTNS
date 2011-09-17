@@ -1,6 +1,6 @@
 <%include include/head.html>
 <h1>Manage “<%ownIdentity.nickname|html>”</h1>
-<%foreach ownIdentity.targets target>
+<%foreach ownIdentity.targets target|sort>
 	<%first>
 		<h2>Existing Targets</h2>
 	<%/first>
