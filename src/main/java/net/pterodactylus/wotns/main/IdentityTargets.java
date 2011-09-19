@@ -74,8 +74,10 @@ public class IdentityTargets implements Iterable<Entry<String, String>> {
 	 */
 	@Override
 	public Iterator<Entry<String, String>> iterator() {
-		scanForTargets();
-		return targets.entrySet().iterator();
+		synchronized (targets) {
+			scanForTargets();
+			return new HashMap<String, String>(targets).entrySet().iterator();
+		}
 	}
 
 }
