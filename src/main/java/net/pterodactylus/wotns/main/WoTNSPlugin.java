@@ -35,7 +35,7 @@ import freenet.pluginmanager.FredPluginVersioned;
 import freenet.pluginmanager.PluginRespirator;
 
 /**
- * TODO
+ * Main plugin class for Web of Trust Name Service.
  *
  * @author <a href="mailto:bombe@pterodactylus.net">David ‘Bombe’ Roden</a>
  */
@@ -46,36 +46,63 @@ public class WoTNSPlugin implements FredPlugin, FredPluginL10n, FredPluginBaseL1
 		Logging.setupConsoleLogging();
 	}
 
+	/** The current version of the plugin. */
 	private static final Version VERSION = new Version(0, 0, 7);
 
+	/** The plugin respirator. */
 	private PluginRespirator pluginRespirator;
 
+	/** The l10n handler. */
 	private PluginL10n l10n;
 
+	/** The web interface. */
 	private WebInterface webInterface;
 
+	/** The resolver. */
 	private Resolver resolver;
 
+	/** The web of trust connector. */
 	private WebOfTrustConnector webOfTrustConnector;
 
+	/** The identity manager. */
 	private IdentityManager identityManager;
 
 	//
 	// ACCESSORS
 	//
 
+	/**
+	 * Returns the high-level simple client for the node.
+	 *
+	 * @return The high-level simple client
+	 */
 	public HighLevelSimpleClient getHighLevelSimpleClient() {
 		return pluginRespirator.getHLSimpleClient();
 	}
 
+	/**
+	 * Returns the toadlet container of the node.
+	 *
+	 * @return The toadlet container of the node
+	 */
 	public ToadletContainer getToadletContainer() {
 		return pluginRespirator.getToadletContainer();
 	}
 
+	/**
+	 * Returns the identity manager.
+	 *
+	 * @return The identity manager
+	 */
 	public IdentityManager getIdentityManager() {
 		return identityManager;
 	}
 
+	/**
+	 * Returns the resolver.
+	 *
+	 * @return The resolver
+	 */
 	public Resolver getResolver() {
 		return resolver;
 	}
@@ -88,7 +115,7 @@ public class WoTNSPlugin implements FredPlugin, FredPluginL10n, FredPluginBaseL1
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void runPlugin(PluginRespirator pluginRespirator) {
+	public void runPlugin(@SuppressWarnings("hiding") PluginRespirator pluginRespirator) {
 		this.pluginRespirator = pluginRespirator;
 
 		PluginConnector pluginConnector = new PluginConnector(pluginRespirator);

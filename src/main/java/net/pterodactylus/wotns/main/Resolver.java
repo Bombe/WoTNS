@@ -35,26 +35,61 @@ import net.pterodactylus.wotns.freenet.wot.Trust;
 import freenet.keys.FreenetURI;
 
 /**
- * TODO
+ * Resolves short names as given by the user.
+ * <p>
+ * Short names generally have the syntax:
+ *
+ * <pre>
+ * identity [ ‘@’ start-of-key ] ‘/’ target [ ‘/’ file-path ]
+ * </pre>
+ * <p>
+ * Because resolving a short name is based on the <i>web</i> of trust, the ID of
+ * an own identity must be given in order to find the entry point into the web
+ * of trust. If no ID is specified, the ID of a random own identity is used. If
+ * no own identity exists, short names can not be resolved.
  *
  * @author <a href="mailto:bombe@pterodactylus.net">David ‘Bombe’ Roden</a>
  */
 public class Resolver {
 
+	/** The logger. */
 	private static final Logger logger = Logging.getLogger(Resolver.class);
 
+	/** The identity manager. */
 	private final IdentityManager identityManager;
 
+	/** The ID of the own identity to use for resolving. */
 	private String ownIdentityId;
 
+	/**
+	 * Creates a new resolver.
+	 *
+	 * @param identityManager
+	 *            The identity manager to use
+	 */
 	public Resolver(IdentityManager identityManager) {
 		this.identityManager = identityManager;
 	}
 
+	//
+	// ACCESSORS
+	//
+
+	/**
+	 * Returns the ID of the own identity used for resolving short names.
+	 *
+	 * @return The ID of the own identity used for resolving
+	 */
 	public String getOwnIdentityId() {
 		return ownIdentityId;
 	}
 
+	/**
+	 * Sets the ID of the own identity used for resolving short names.
+	 *
+	 * @param ownIdentityId
+	 *            The ID of the own identity used for resolving
+	 */
 	public void setOwnIdentityId(String ownIdentityId) {
 		this.ownIdentityId = ownIdentityId;
 	}
@@ -63,6 +98,16 @@ public class Resolver {
 	// ACTIONS
 	//
 
+	/**
+	 * Resolves a short name.
+	 *
+	 * @param shortUri
+	 *            The short name to resolve
+	 * @return The Freenet URI the short name resolves to, or {@code null} if
+	 *         the short name can not be resolved
+	 * @throws MalformedURLException
+	 *             if the short name is malformed
+	 */
 	public FreenetURI resolveURI(String shortUri) throws MalformedURLException {
 		int firstSlash = shortUri.indexOf('/');
 		if (firstSlash == -1) {
@@ -82,6 +127,18 @@ public class Resolver {
 	// PRIVATE METHODS
 	//
 
+	/**
+	 * Locates the identity specified by the given short name. If more than one
+	 * identity matches the given pattern, the one with the highest trust is
+	 * used. When calculating the trust, local and remote trust are treated
+	 * equally, i.e. the higher value of either one is used.
+	 *
+	 * @param shortName
+	 *            The short name to locate an identity for
+	 * @return The located identity, or {@code null} if no identity can be
+	 *         found, or if no own identity is found to use for locating an
+	 *         identity
+	 */
 	private Identity locateIdentity(String shortName) {
 		int atSign = shortName.indexOf('@');
 		String identityName = shortName;
@@ -130,6 +187,12 @@ public class Resolver {
 		return matchingIdentities.get(0);
 	}
 
+	/**
+	 * Returns a random own identity from the web of trust.
+	 *
+	 * @return A random own identity from the web of trust, or {@code null} if
+	 *         the web of trust does not have any own identities
+	 */
 	private OwnIdentity getFirstOwnIdentity() {
 		Set<OwnIdentity> ownIdentities = identityManager.getAllOwnIdentities();
 		if (!ownIdentities.isEmpty()) {
