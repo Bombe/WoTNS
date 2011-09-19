@@ -56,6 +56,7 @@ public class IdentityTargets implements Iterable<Entry<String, String>> {
 
 	private void scanForTargets() {
 		synchronized (targets) {
+			targets.clear();
 			for (Entry<String, String> property : identity.getProperties().entrySet()) {
 				if (property.getKey().startsWith("tns.")) {
 					targets.put(property.getKey().substring(4), property.getValue());
