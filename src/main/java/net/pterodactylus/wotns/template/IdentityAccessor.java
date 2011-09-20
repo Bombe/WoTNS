@@ -17,13 +17,15 @@
 
 package net.pterodactylus.wotns.template;
 
+import net.pterodactylus.util.template.Accessor;
 import net.pterodactylus.util.template.ReflectionAccessor;
 import net.pterodactylus.util.template.TemplateContext;
 import net.pterodactylus.wotns.freenet.wot.Identity;
 import net.pterodactylus.wotns.main.IdentityTargets;
 
 /**
- * TODO
+ * {@link Accessor} implementation that can expose {@link IdentityTargets} for
+ * an {@link Identity}.
  *
  * @author <a href="mailto:bombe@pterodactylus.net">David ‘Bombe’ Roden</a>
  */
