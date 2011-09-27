@@ -69,7 +69,7 @@ public class WoTNSPlugin implements FredPlugin, FredPluginL10n, FredPluginBaseL1
 	}
 
 	/** The current version of the plugin. */
-	private static final Version VERSION = new Version(0, 0, 7);
+	private static final Version VERSION = new Version(0, 0, 8);
 
 	/** The plugin respirator. */
 	private PluginRespirator pluginRespirator;
