@@ -137,7 +137,7 @@ public class WoTNSPlugin implements FredPlugin, FredPluginL10n, FredPluginBaseL1
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void runPlugin(@SuppressWarnings("hiding") PluginRespirator pluginRespirator) {
+	public void runPlugin(PluginRespirator pluginRespirator) {
 		this.pluginRespirator = pluginRespirator;
 
 		PluginConnector pluginConnector = new PluginConnector(pluginRespirator);
