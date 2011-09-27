@@ -17,7 +17,11 @@
 
 package net.pterodactylus.wotns.main;
 
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+
 import net.pterodactylus.util.logging.Logging;
+import net.pterodactylus.util.logging.LoggingListener;
 import net.pterodactylus.util.version.Version;
 import net.pterodactylus.wotns.freenet.plugin.PluginConnector;
 import net.pterodactylus.wotns.freenet.wot.IdentityManager;
@@ -43,7 +47,25 @@ public class WoTNSPlugin implements FredPlugin, FredPluginL10n, FredPluginBaseL1
 
 	static {
 		Logging.setup("WoTNS");
-		Logging.setupConsoleLogging();
+		Logging.addLoggingListener(new LoggingListener() {
+
+			@Override
+			public void logged(LogRecord logRecord) {
+				Class<?> loggerClass = Logging.getLoggerClass(logRecord.getLoggerName());
+				int recordLevel = logRecord.getLevel().intValue();
+				if (recordLevel < Level.FINE.intValue()) {
+					freenet.support.Logger.debug(loggerClass, String.format(logRecord.getMessage(), logRecord.getParameters()), logRecord.getThrown());
+				} else if (recordLevel < Level.INFO.intValue()) {
+					freenet.support.Logger.minor(loggerClass, String.format(logRecord.getMessage(), logRecord.getParameters()), logRecord.getThrown());
+				} else if (recordLevel < Level.WARNING.intValue()) {
+					freenet.support.Logger.normal(loggerClass, String.format(logRecord.getMessage(), logRecord.getParameters()), logRecord.getThrown());
+				} else if (recordLevel < Level.SEVERE.intValue()) {
+					freenet.support.Logger.warning(loggerClass, String.format(logRecord.getMessage(), logRecord.getParameters()), logRecord.getThrown());
+				} else {
+					freenet.support.Logger.error(loggerClass, String.format(logRecord.getMessage(), logRecord.getParameters()), logRecord.getThrown());
+				}
+			}
+		});
 	}
 
 	/** The current version of the plugin. */
