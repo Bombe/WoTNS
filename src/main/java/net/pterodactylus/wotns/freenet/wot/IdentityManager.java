@@ -75,7 +75,7 @@ public class IdentityManager extends AbstractService {
 	 *            The Web of Trust connector
 	 */
 	public IdentityManager(WebOfTrustConnector webOfTrustConnector) {
-		super("Sone Identity Manager", false);
+		super("WoTNS Identity Manager", false);
 		this.webOfTrustConnector = webOfTrustConnector;
 	}
 
