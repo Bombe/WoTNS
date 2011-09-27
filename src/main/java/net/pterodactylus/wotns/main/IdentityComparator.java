@@ -22,14 +22,24 @@ import java.util.Comparator;
 import net.pterodactylus.wotns.freenet.wot.Identity;
 
 /**
- * TODO
+ * Contains several comparators that can be used with {@link Identity}s. At the
+ * moment only a single {@link Comparator} is defined; it sorts identities
+ * case-insensitively by name.
  *
  * @author <a href="mailto:bombe@pterodactylus.net">David ‘Bombe’ Roden</a>
  */
 public class IdentityComparator {
 
+	/** Comparator for sorting by name. */
+	@SuppressWarnings("synthetic-access")
 	public static final Comparator<Identity> NAME = new IdentityNameComparator();
 
+	/**
+	 * {@link Comparator} for {@link Identity}s that sorts case-insensitively by
+	 * name.
+	 *
+	 * @author <a href="mailto:bombe@pterodactylus.net">David ‘Bombe’ Roden</a>
+	 */
 	private static class IdentityNameComparator implements Comparator<Identity> {
 
 		/**

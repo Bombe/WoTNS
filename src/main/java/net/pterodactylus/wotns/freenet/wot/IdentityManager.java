@@ -212,7 +212,6 @@ public class IdentityManager extends AbstractService {
 	protected void serviceRun() {
 		while (!shouldStop()) {
 			Map<OwnIdentity, Map<String, Identity>> currentIdentities = new HashMap<OwnIdentity, Map<String, Identity>>();
-			@SuppressWarnings("hiding")
 			Map<String, OwnIdentity> currentOwnIdentities = new HashMap<String, OwnIdentity>();
 
 			Set<OwnIdentity> ownIdentities = null;
@@ -314,7 +313,6 @@ public class IdentityManager extends AbstractService {
 	 */
 	private void checkTrustedIdentities(OwnIdentity ownIdentity, Map<String, Identity> trustedIdentities) {
 
-		@SuppressWarnings("hiding")
 		Map<String, Identity> currentTrustedIdentities = new HashMap<String, Identity>();
 		synchronized (syncObject) {
 			if (this.currentTrustedIdentities.containsKey(ownIdentity)) {

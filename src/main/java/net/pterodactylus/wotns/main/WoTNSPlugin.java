@@ -17,7 +17,11 @@
 
 package net.pterodactylus.wotns.main;
 
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+
 import net.pterodactylus.util.logging.Logging;
+import net.pterodactylus.util.logging.LoggingListener;
 import net.pterodactylus.util.version.Version;
 import net.pterodactylus.wotns.freenet.plugin.PluginConnector;
 import net.pterodactylus.wotns.freenet.wot.IdentityManager;
@@ -35,7 +39,7 @@ import freenet.pluginmanager.FredPluginVersioned;
 import freenet.pluginmanager.PluginRespirator;
 
 /**
- * TODO
+ * Main plugin class for Web of Trust Name Service.
  *
  * @author <a href="mailto:bombe@pterodactylus.net">David ‘Bombe’ Roden</a>
  */
@@ -43,39 +47,84 @@ public class WoTNSPlugin implements FredPlugin, FredPluginL10n, FredPluginBaseL1
 
 	static {
 		Logging.setup("WoTNS");
-		Logging.setupConsoleLogging();
+		Logging.addLoggingListener(new LoggingListener() {
+
+			@Override
+			public void logged(LogRecord logRecord) {
+				Class<?> loggerClass = Logging.getLoggerClass(logRecord.getLoggerName());
+				int recordLevel = logRecord.getLevel().intValue();
+				if (recordLevel < Level.FINE.intValue()) {
+					freenet.support.Logger.debug(loggerClass, String.format(logRecord.getMessage(), logRecord.getParameters()), logRecord.getThrown());
+				} else if (recordLevel < Level.INFO.intValue()) {
+					freenet.support.Logger.minor(loggerClass, String.format(logRecord.getMessage(), logRecord.getParameters()), logRecord.getThrown());
+				} else if (recordLevel < Level.WARNING.intValue()) {
+					freenet.support.Logger.normal(loggerClass, String.format(logRecord.getMessage(), logRecord.getParameters()), logRecord.getThrown());
+				} else if (recordLevel < Level.SEVERE.intValue()) {
+					freenet.support.Logger.warning(loggerClass, String.format(logRecord.getMessage(), logRecord.getParameters()), logRecord.getThrown());
+				} else {
+					freenet.support.Logger.error(loggerClass, String.format(logRecord.getMessage(), logRecord.getParameters()), logRecord.getThrown());
+				}
+			}
+		});
 	}
 
-	private static final Version VERSION = new Version(0, 0, 7);
+	/** The current version of the plugin. */
+	private static final Version VERSION = new Version(0, 0, 8);
 
+	/** The plugin respirator. */
 	private PluginRespirator pluginRespirator;
 
+	/** The l10n handler. */
 	private PluginL10n l10n;
 
+	/** The web interface. */
 	private WebInterface webInterface;
 
+	/** The resolver. */
 	private Resolver resolver;
 
+	/** The web of trust connector. */
 	private WebOfTrustConnector webOfTrustConnector;
 
+	/** The identity manager. */
 	private IdentityManager identityManager;
 
 	//
 	// ACCESSORS
 	//
 
+	/**
+	 * Returns the high-level simple client for the node.
+	 *
+	 * @return The high-level simple client
+	 */
 	public HighLevelSimpleClient getHighLevelSimpleClient() {
 		return pluginRespirator.getHLSimpleClient();
 	}
 
+	/**
+	 * Returns the toadlet container of the node.
+	 *
+	 * @return The toadlet container of the node
+	 */
 	public ToadletContainer getToadletContainer() {
 		return pluginRespirator.getToadletContainer();
 	}
 
+	/**
+	 * Returns the identity manager.
+	 *
+	 * @return The identity manager
+	 */
 	public IdentityManager getIdentityManager() {
 		return identityManager;
 	}
 
+	/**
+	 * Returns the resolver.
+	 *
+	 * @return The resolver
+	 */
 	public Resolver getResolver() {
 		return resolver;
 	}

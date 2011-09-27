@@ -114,11 +114,11 @@ public class WebInterface {
 		pageToadlets.add(pageToadletFactory.createPageToadlet(new StaticPage<FreenetRequest>("css/", "/static/css/", "text/css")));
 
 		ToadletContainer toadletContainer = wotNSPlugin.getToadletContainer();
-		toadletContainer.getPageMaker().addNavigationCategory("/tns/index.html", "Navigation.Menu.Name", "Navigation.Menu.Tooltip", wotNSPlugin);
+		toadletContainer.getPageMaker().addNavigationCategory("/tns/index.html", "Navigation.Menu.WoTNS.Name", "Navigation.Menu.WoTNS.Tooltip", wotNSPlugin);
 		for (PageToadlet toadlet : pageToadlets) {
 			String menuName = toadlet.getMenuName();
 			if (menuName != null) {
-				toadletContainer.register(toadlet, "Navigation.Menu.Name", toadlet.path(), true, "Navigation.Menu.Item." + menuName + ".Name", "Navigation.Menu.Item." + menuName + ".Tooltip", false, toadlet);
+				toadletContainer.register(toadlet, "Navigation.Menu.WoTNS.Name", toadlet.path(), true, "Navigation.Menu.WoTNS.Item." + menuName + ".Name", "Navigation.Menu.WoTNS.Item." + menuName + ".Tooltip", false, toadlet);
 			} else {
 				toadletContainer.register(toadlet, null, toadlet.path(), true, false);
 			}
@@ -133,7 +133,7 @@ public class WebInterface {
 		for (PageToadlet pageToadlet : pageToadlets) {
 			toadletContainer.unregister(pageToadlet);
 		}
-		toadletContainer.getPageMaker().removeNavigationCategory("Navigation.Menu.Name");
+		toadletContainer.getPageMaker().removeNavigationCategory("Navigation.Menu.WoTNS.Name");
 	}
 
 	/**
