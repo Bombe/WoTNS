@@ -18,6 +18,7 @@
 package net.pterodactylus.wotns.ui.web;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 
 import net.pterodactylus.util.template.Template;
 import net.pterodactylus.util.template.TemplateContext;
@@ -80,6 +81,14 @@ public class ResolverPage extends BasicPage {
 			/* TODO - do something. */
 		}
 		templateContext.set("shortName", path);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isLinkExcepted(URI link) {
+		return true;
 	}
 
 }
