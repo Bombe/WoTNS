@@ -1,0 +1,44 @@
+group = 'net.pterodactylus'
+version = '0.0.8'
+
+repositories {
+     maven { url "http://maven.pterodactylus.net/" }
+     mavenCentral()
+}
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+configurations {
+    provided {
+        dependencies.all { dep ->
+            configurations.default.exclude group: dep.group, module: dep.name
+        }
+    }
+    compile.extendsFrom provided
+}
+ 
+dependencies {
+    provided group: 'org.freenetproject', name: 'fred', version: '0.7.5.1475'
+    provided group: 'org.freenetproject', name: 'freenet-ext', version: '26'
+
+    compile group: 'net.pterodactylus', name: 'utils', version: '0.11'
+
+    testCompile group: 'junit', name: 'junit', version: '3.8.2'
+}
+
+task fatJar(type: Jar) {
+    archiveName = project.name + '-jar-with-dependencies.jar'
+    from { (configurations.runtime - configurations.provided).collect { it.isDirectory() ? it : zipTree(it) } }
+    manifest {
+        attributes('Plugin-Main-Class': 'net.pterodactylus.wotns.main.WoTNSPlugin')
+    }
+    with jar
+}
+
