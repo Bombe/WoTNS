@@ -1,5 +1,5 @@
 /*
- * Sone - Command.java - Copyright © 2011 David Roden
+ * WoTNS - Command.java - Copyright © 2011 David Roden
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ import freenet.support.api.Bucket;
 
 /**
  * Implementation of an FCP interface for other clients or plugins to
- * communicate with Sone.
+ * communicate with WoTNS.
  *
  * @author <a href="mailto:bombe@pterodactylus.net">David ‘Bombe’ Roden</a>
  */
